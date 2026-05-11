@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ina Devina | Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(180deg, #000000 0%, #2c2c2c 50%, #000000 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* NAV */
+        .nav-glow:hover {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(59, 130, 246, 0.6);
+            color: #fff !important;
+        }
+
+        .nav-link {
+            transition: color 0.3s;
+        }
+
+        .nav-link.active {
+            color: #3b82f6;
+        }
+
+        /* PAGE TRANSITIONS */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: pageIn 0.4s ease;
+        }
+
+        @keyframes pageIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* SCROLL REVEAL ANIMATIONS */
+
+        /* Base hidden state */
+        .reveal {
+            opacity: 0;
+            transition: opacity 0.7s ease, transform 0.7s ease;
+            will-change: opacity, transform;
+        }
+
+        /* Direction variants */
+        .reveal-up {
+            transform: translateY(50px);
+        }
+
+        .reveal-left {
+            transform: translateX(-60px);
+        }
+
+        .reveal-right {
+            transform: translateX(60px);
+        }
+
+        .reveal-scale {
+            transform: scale(0.88);
+        }
+
+        .reveal-fade {
+            transform: none;
+        }
+
+        /* Visible state — added by JS */
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* Stagger delays */
+        .delay-100 {
+            transition-delay: 0.1s;
+        }
+
+        .delay-200 {
+            transition-delay: 0.2s;
+        }
+
+        .delay-300 {
+            transition-delay: 0.3s;
+        }
+
+        .delay-400 {
+            transition-delay: 0.4s;
+        }
+
+        .delay-500 {
+            transition-delay: 0.5s;
+        }
+
+        .delay-600 {
+            transition-delay: 0.6s;
+        }
+
+        .delay-700 {
+            transition-delay: 0.7s;
+        }
+
+        /* HOME */
+        .project-card {
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .project-glow {
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+        }
+
+        .project-card:hover {
+            transform: scale(1.03) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            z-index: 10;
+        }
+
+        /* HOBBIES */
+        .hobby-item {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            flex-shrink: 0;
+            cursor: pointer;
+            position: relative;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            border: 2px solid transparent;
+            overflow: hidden;
+        }
+
+        .hobby-item:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.6);
+            z-index: 10;
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .scroll-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        /* GALLERY */
+        .tab-container {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 9999px;
+            padding: 6px;
+            display: inline-flex;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 24px;
+            text-align: center;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #ffffff;
+            border-radius: 9999px;
+            font-size: 16px;
+        }
+
+        .tab-btn.active {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .gallery-item {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 20px;
+            border: 2px solid transparent;
+            overflow: hidden;
+            background: #1a1a1a;
+            position: relative;
+            backface-visibility: hidden;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05) translateY(-8px);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.7);
+            z-index: 10;
+        }
+
+        .gallery-section {
+            display: none;
+        }
+
+        .gallery-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* FOOTER */
+        .footer-link {
+            transition: all 0.3s ease;
+            color: #9ca3af;
+        }
+
+        .footer-link:hover {
+            color: #ffffff;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        }
+
+        /* NAVBAR LINK */
+        .nav-link {
+            position: relative;
+            color: white;
+            transition: all 0.3s ease;
+            text-shadow:
+                0 0 5px rgba(255, 255, 255, 0.25),
+                0 0 10px rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-link:hover {
+            color: #3b82f6;
+            text-shadow:
+                0 0 5px #3b82f6,
+                0 0 10px #3b82f6,
+                0 0 20px #3b82f6,
+                0 0 40px rgba(59, 130, 246, 0.7);
+        }
+
+        .nav-link.active {
+            color: #3b82f6;
+            text-shadow:
+                0 0 5px #3b82f6,
+                0 0 10px #3b82f6,
+                0 0 20px #3b82f6,
+                0 0 40px rgba(59, 130, 246, 0.7);
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Hero text typewriter cursor */
+        .cursor-blink {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background: #3b82f6;
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Parallax hero overlay */
+        #hero-img {
+            transition: transform 0.1s linear;
+        }
+
+        /*  Counter number animation  */
+        .stat-num {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        /*  Scroll progress bar  */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, #3b82f6, #a855f7);
+            z-index: 9999;
+            transition: width 0.1s linear;
+        }
+
+        /*  Shimmer on project cards  */
+        .project-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.08) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+            pointer-events: none;
+        }
+
+        .project-card:hover::after {
+            transform: translateX(100%);
+        }
+
+        /*  Gallery stagger for grid items  */
+        .gallery-item {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+
+        .gallery-item.visible {
+            opacity: 1;
+            transform: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SCROLL PROGRESS BAR -->
+    <div id="scroll-progress"></div>
+
+    <!-- NAVBAR -->
+    <nav
+        class="fixed top-0 w-full z-50 bg-black/60 backdrop-blur-lg py-5 px-6 md:px-20 flex justify-between items-center border-b border-white/5">
+
+        <div class="w-20 h-20">
+            <img src="logo.jpg" alt="Logo" class="w-full h-full object-cover rounded-full">
+        </div>
+
+        <div class="hidden md:flex space-x-10 text-[15px] font-bold uppercase tracking-[0.2em]">
+            <a href="#" data-page="home" class="nav-link nav-glow active">Home</a>
+            <a href="#" data-page="hobbies" class="nav-link nav-glow">My Hobbies</a>
+            <a href="#" data-page="gallery" class="nav-link nav-glow">Photo Gallery</a>
+            <a href="#" data-scroll="contact-section" class="nav-link nav-glow contact-btn">Contact Me</a>
+        </div>
+
+        <div class="md:hidden text-xl cursor-pointer" id="mobile-menu-btn">☰</div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" style="display:none;"
+        class="fixed top-[88px] left-0 w-full z-40 bg-black/95 backdrop-blur-lg border-b border-white/10 px-6 py-6 flex-col space-y-5 text-sm font-bold uppercase tracking-widest">
+        <a href="#" data-page="home" class="nav-link block py-2">Home</a>
+        <a href="#" data-page="hobbies" class="nav-link block py-2">My Hobbies</a>
+        <a href="#" data-page="gallery" class="nav-link block py-2">Photo Gallery</a>
+        <a href="#" data-page="home" data-scroll="contact-section" class="nav-link block py-2">Contact Me</a>
+    </div>
+
+
+    <!--  HOME PAGE  -->
+    <div id="page-home" class="page active">
+
+        <header class="relative h-screen flex items-center justify-center px-6 overflow-hidden">
+            <div class="absolute inset-0 z-0 bg-black">
+                <img id="hero-img" src="fotoHome.jpg" class="w-full h-full object-cover opacity-100 grayscale">
+            </div>
+            <!-- Gradient overlay bawah -->
+            <div class="absolute inset-0 z-1 bg-gradient-to-b from-transparent via-transparent to-black/80"></div>
+
+            <div class="relative z-10 max-w-5xl w-full">
+                <!-- Hero text reveal on load -->
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight opacity-0" id="hero-title"
+                    style="animation: heroSlideUp 0.9s 0.1s ease forwards;">
+                    Hi, I'm Ina Devina
+                </h1>
+                <p class="text-blue-500 font-bold text-lg mb-4 tracking-widest uppercase opacity-0" id="hero-sub"
+                    style="animation: heroSlideUp 0.8s 0.3s ease forwards;">
+                    Beginner Content Creator and Graphic Designer
+                </p>
+                <p class="max-w-2xl text-gray-400 text-lg leading-relaxed border-l-2 border-blue-500 pl-6 opacity-0"
+                    id="hero-desc" style="animation: heroSlideUp 0.8s 0.5s ease forwards;">
+                    I create impactful visual content that helps brands and events tell their stories in a powerful and
+                    engaging way.
+                </p>
+
+                <!-- Scroll indicator -->
+                <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-0"
+                    style="animation: heroSlideUp 0.8s 1s ease forwards;">
+                </div>
+            </div>
+        </header>
+
+        <style>
+            @keyframes heroSlideUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        </style>
+
+        <!-- ABOUT -->
+        <section id="about" class="py-24 px-6 md:px-20">
+            <div class="flex items-center justify-center mb-20 reveal reveal-up">
+                <div class="h-[2px] w-16 bg-white/90"></div>
+                <h3 class="mx-6 text-3xl font-black uppercase tracking-[0.4em] text-white">ABOUT ME</h3>
+                <div class="h-[2px] w-16 bg-white/90"></div>
+            </div>
+
+            <div class="max-w-4xl mx-auto text-center">
+                <p class="text-gray-300 text-xl md:text-2xl font-light leading-loose reveal reveal-up delay-200">
+                    "For me, creativity has always been a way to express what words sometimes cannot.
+                    I find beauty in small details. The warmth of light in a photograph, the energy of
+                    an event, the emotion hidden behind a design.
+                    Through content creation and graphic design, I try to turn those moments into
+                    visuals that feel alive.
+                    <span class="text-white font-semibold block mt-6">
+                        "I don't just want my work to be seen. I want it to be felt."
+                    </span>
+                </p>
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projects" class="py-24 px-6 md:px-20">
+            <div class="flex items-center justify-center mb-20 reveal reveal-up">
+                <div class="h-[2px] w-16 bg-white/90"></div>
+                <h3 class="mx-6 text-3xl font-black uppercase tracking-[0.4em] text-white">MY PROJECTS</h3>
+                <div class="h-[2px] w-16 bg-white/90"></div>
+            </div>
+
+            <div class="max-w-6xl mx-auto space-y-32">
+
+                <!-- Project 1 -->
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div class="order-2 md:order-1 reveal reveal-left">
+                        <h3 class="text-2xl font-bold mb-1">UC Library</h3>
+                        <p class="text-blue-500 font-bold mb-4 text-xs uppercase tracking-widest">Content Creation
+                            (Internship)</p>
+                        <p class="text-gray-400 leading-relaxed text-lg">As a content creator intern for UC Library,
+                            I contributed to developing creative and informative digital content.
+                            My role involved conceptualizing, designing, and producing visuals that made information
+                            more appealing and accessible to students.</p>
+                    </div>
+                    <div
+                        class="order-1 md:order-2 aspect-video rounded-2xl overflow-hidden project-card project-glow reveal reveal-right relative">
+                        <img src="library.jpg" alt="UC Library Project" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div
+                        class="aspect-video rounded-2xl overflow-hidden project-card project-glow reveal reveal-left relative">
+                        <img src="fambus.jpg" alt="UC Family Business Project" class="w-full h-full object-cover">
+                    </div>
+                    <div class="reveal reveal-right">
+                        <h3 class="text-2xl font-bold mb-1">UC Family Business</h3>
+                        <p class="text-blue-500 font-bold mb-4 text-xs uppercase tracking-widest">Content Editing
+                            (Internship)</p>
+                        <p class="text-gray-400 leading-relaxed text-lg">During my internship, I was responsible
+                            for editing video content for UC Family Business on YouTube and Instagram. I transformed
+                            raw footage into engaging and informative content, ensuring each video aligned with the
+                            brand's message and visual identity.</p>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div class="order-2 md:order-1 reveal reveal-left">
+                        <h3 class="text-2xl font-bold mb-1">Canva Design Projects</h3>
+                        <p class="text-blue-500 font-bold mb-4 text-xs uppercase tracking-widest">Personal &
+                            Ready-to-Use Templates</p>
+                        <p class="text-gray-400 leading-relaxed text-lg">I actively create design projects using Canva
+                            for personal use and ready-to-use templates. I design layouts that are practical, visually
+                            balanced, and easy to customize for various needs such as social media posts, presentations,
+                            and promotional materials.</p>
+                    </div>
+                    <div
+                        class="order-1 md:order-2 aspect-video rounded-2xl overflow-hidden project-card project-glow reveal reveal-right relative">
+                        <img src="canva.jpg" alt="Canva Design Project" class="w-full h-full object-cover">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FOOTER / CONTACT -->
+        <footer id="contact-section"
+            class="pt-24 pb-12 px-6 md:px-20 bg-black/40 border-t border-white/10 rounded-t-[60px]">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div class="bg-[#1e1e1e] p-10 rounded-[30px] border border-white/5 reveal reveal-left">
+                    <p class="text-gray-400 mb-2">Contact Me</p>
+                    <h3 class="text-4xl font-bold mb-10">Let's Get In Touch</h3>
+                    <form class="space-y-6">
+                        <input type="text" placeholder="your name..."
+                            class="w-full p-4 bg-[#d1d1d1] text-black rounded-lg focus:ring-4 ring-blue-500/30 outline-none transition-all">
+                        <input type="email" placeholder="example@gmail.com"
+                            class="w-full p-4 bg-[#d1d1d1] text-black rounded-lg focus:ring-4 ring-blue-500/30 outline-none transition-all">
+                        <textarea rows="4" placeholder="type here..."
+                            class="w-full p-4 bg-[#d1d1d1] text-black rounded-lg focus:ring-4 ring-blue-500/30 outline-none transition-all"></textarea>
+                        <button type="submit"
+                            class="px-12 py-4 bg-[#0a0a0a] border border-white/20 text-white font-bold rounded-full hover:bg-white hover:text-black transition-all transform hover:scale-105">Submit</button>
+                    </form>
+                </div>
+                <div class="flex flex-col justify-between reveal reveal-right">
+                    <div class="space-y-10">
+                        <a href="https://wa.me/6281228643644" target="_blank" class="flex items-center group">
+                            <div
+                                class="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mr-6 group-hover:bg-green-500 transition-colors">
+                                <span class="text-2xl">📱</span>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 uppercase font-bold tracking-widest">WhatsApp</p>
+                                <p class="text-xl font-semibold group-hover:text-green-500 transition-colors">
+                                    081228643644</p>
+                            </div>
+                        </a>
+                        <a href="mailto:idevina01@student.ciputra.ac.id" class="flex items-center group">
+                            <div
+                                class="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mr-6 group-hover:bg-blue-500 transition-colors">
+                                <span class="text-2xl">✉️</span>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 uppercase font-bold tracking-widest">Email Address</p>
+                                <p class="text-xl font-semibold group-hover:text-blue-500 transition-colors">
+                                    idevina01@student.ciputra.ac.id</p>
+                            </div>
+                        </a>
+                        <div class="space-y-4">
+                            <div class="w-full h-72 rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+                                <iframe src="https://www.google.com/maps?q=-7.1568,112.6556&hl=en&z=14&output=embed"
+                                    class="w-full h-full" allowfullscreen="" loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
+                            <div class="bg-white/5 border border-white/10 rounded-2xl p-5">
+                                <p class="text-gray-400 text-sm uppercase tracking-widest mb-2">My Location</p>
+                                <h4 class="text-2xl font-bold mb-3">Gresik Kota Mas, East Java</h4>
+                                <a href="https://maps.app.goo.gl/suwSPsyiUTvcA2Fy8" target="_blank"
+                                    class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white text-black font-semibold hover:bg-blue-500 hover:text-white transition-all duration-300">
+                                    📍 Open in Google Maps
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="max-w-6xl mx-auto mt-24 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center reveal reveal-up">
+                <div class="text-center md:text-left mb-8 md:mb-0">
+                    <img src="logo.jpg" class="w-20 rounded-full">
+                    <p class="text-white-600 text-xs tracking-widest">copyright @ 2026</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-x-12 gap-y-4">
+                    <a href="#" data-page="home" class="footer-link text-sm uppercase tracking-tighter">Home</a>
+                    <a href="#" data-page="hobbies" class="footer-link text-sm uppercase tracking-tighter">MyHobbies</a>
+                    <a href="#" data-page="home" data-scroll="about"
+                        class="footer-link text-sm uppercase tracking-tighter">About Me</a>
+                    <a href="#" data-page="gallery" class="footer-link text-sm uppercase tracking-tighter">My
+                        Gallery</a>
+                    <a href="#" data-page="home" data-scroll="projects"
+                        class="footer-link text-sm uppercase tracking-tighter">My Project</a>
+                    <a href="#" data-page="home" data-scroll="contact-section"
+                        class="footer-link text-sm uppercase tracking-tighter">Contact Me</a>
+                </div>
+            </div>
+        </footer>
+
+    </div><!-- /page-home -->
+
+
+    <!--  HOBBIES PAGE  -->
+    <div id="page-hobbies" class="page">
+
+        <header class="pt-40 pb-20 px-6 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight uppercase reveal reveal-up">
+                My Hobbies and Interest
+            </h1>
+            <div class="flex items-center justify-center opacity-60 reveal reveal-up delay-200">
+                <div class="h-[2px] w-12 bg-gray-400"></div>
+                <p class="mx-4 text-white tracking-widest text-sm uppercase">A Few Things I Like To Do</p>
+                <div class="h-[2px] w-12 bg-gray-400"></div>
+            </div>
+        </header>
+
+        <!-- BAKING -->
+        <section class="py-16 px-6 md:px-20 max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center gap-12 mb-12">
+                <div class="w-full md:w-1/3 flex justify-center reveal reveal-left">
+                    <img src="oven.png" alt="Baking Icon"
+                        class="w-full max-w-[300px] grayscale brightness-125 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                </div>
+                <div class="w-full md:w-2/3 reveal reveal-right">
+                    <h2 class="text-5xl font-bold mb-6 tracking-tighter">BAKING</h2>
+                    <p class="text-gray-300 text-lg leading-relaxed max-w-xl">Baking, especially chocolate desserts, is
+                        my way of slowing down and enjoying the little moments in life. There's something comforting
+                        about turning simple ingredients into something warm, sweet, and made with love.</p>
+                </div>
+            </div>
+            <div class="scroll-container flex space-x-6 overflow-x-auto pb-12 pt-4 px-2 reveal reveal-up delay-200">
+                <div class="hobby-item w-64 h-80"><img src="baking1.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="baking2.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="baking3.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="baking4.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="baking5.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="baking6.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="baking7.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="baking8.jpg" class="w-full h-full object-cover"></div>
+            </div>
+        </section>
+
+        <!-- PHOTOGRAPHY -->
+        <section class="py-16 px-6 md:px-20 max-w-7xl mx-auto border-t border-white/5">
+            <div class="flex flex-col md:flex-row items-center gap-12 mb-12">
+                <div class="w-full md:w-1/3 flex justify-center reveal reveal-left">
+                    <img src="camera.png" alt="Photography Icon"
+                        class="w-full max-w-[250px] grayscale drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                </div>
+                <div class="w-full md:w-2/3 reveal reveal-right">
+                    <h2 class="text-5xl font-bold mb-6 tracking-tighter">PHOTOGRAPHY</h2>
+                    <p class="text-gray-300 text-lg leading-relaxed max-w-xl">Through photography, I capture emotions,
+                        light, and stories that often go unnoticed. For me, every photo is more than an image; it's a
+                        memory frozen in time.</p>
+                </div>
+            </div>
+            <div class="scroll-container flex space-x-6 overflow-x-auto pb-12 pt-4 px-2 reveal reveal-up delay-200">
+                <div class="hobby-item w-64 h-80"><img src="foto1.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="foto2.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="foto3.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="foto4.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="foto5.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="foto6.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="foto7.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="foto8.jpg" class="w-full h-full object-cover"></div>
+            </div>
+        </section>
+
+        <!-- MUSIC -->
+        <section class="py-16 px-6 md:px-20 max-w-7xl mx-auto border-t border-white/5">
+            <div class="flex flex-col md:flex-row items-center gap-12 mb-12">
+                <div class="w-full md:w-1/3 flex justify-center reveal reveal-left">
+                    <img src="headphones.png" alt="Music Icon"
+                        class="w-full max-w-[250px] grayscale drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                </div>
+                <div class="w-full md:w-2/3 reveal reveal-right">
+                    <h2 class="text-5xl font-bold mb-6 tracking-tighter">LISTENING MUSIC</h2>
+                    <p class="text-gray-300 text-lg leading-relaxed max-w-xl">Music is my escape and my inspiration. It
+                        fuels my creativity, sets my mood, and often becomes the rhythm behind the visuals I create.</p>
+                </div>
+            </div>
+            <div class="scroll-container flex space-x-6 overflow-x-auto pb-12 pt-4 px-2 reveal reveal-up delay-200">
+                <div class="hobby-item w-64 h-80"><img src="music1.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="music2.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="music3.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="music4.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="music5.jpg" class="w-full h-full object-cover"></div>
+                <div class="hobby-item w-64 h-80"><img src="music6.jpg" class="w-full h-full object-cover"></div>
+            </div>
+        </section>
+
+        <!-- FOOTER HOBBIES -->
+        <footer id="contact-section"
+            class="pt-24 pb-12 px-6 md:px-20 bg-black/40 border-t border-white/10 rounded-t-[60px]">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div class="bg-[#1e1e1e] p-10 rounded-[30px] border border-white/5 reveal reveal-left">
+                    <p class="text-gray-400 mb-2">Contact Me</p>
+                    <h3 class="text-4xl font-bold mb-10">Let's Get In Touch</h3>
+                    <form class="space-y-6">
+                        <input type="text" placeholder="your name..."
+                            class="w-full p-4 bg-[#d1d1d1] text-black rounded-lg focus:ring-4 ring-blue-500/30 outline-none transition-all">
+                        <input type="email" placeholder="example@gmail.com"
+                            class="w-full p-4 bg-[#d1d1d1] text-black rounded-lg focus:ring-4 ring-blue-500/30 outline-none transition-all">
+                        <textarea rows="4" placeholder="type here..."
+                            class="w-full p-4 bg-[#d1d1d1] text-black rounded-lg focus:ring-4 ring-blue-500/30 outline-none transition-all"></textarea>
+                        <button type="submit"
+                            class="px-12 py-4 bg-[#0a0a0a] border border-white/20 text-white font-bold rounded-full hover:bg-white hover:text-black transition-all transform hover:scale-105">Submit</button>
+                    </form>
+                </div>
+                <div class="flex flex-col justify-between reveal reveal-right">
+                    <div class="space-y-10">
+                        <a href="https://wa.me/6281228643644" target="_blank" class="flex items-center group">
+                            <div
+                                class="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mr-6 group-hover:bg-green-500 transition-colors">
+                                <span class="text-2xl">📱</span>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 uppercase font-bold tracking-widest">WhatsApp</p>
+                                <p class="text-xl font-semibold group-hover:text-green-500 transition-colors">
+                                    081228643644</p>
+                            </div>
+                        </a>
+                        <a href="mailto:idevina01@student.ciputra.ac.id" class="flex items-center group">
+                            <div
+                                class="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mr-6 group-hover:bg-blue-500 transition-colors">
+                                <span class="text-2xl">✉️</span>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 uppercase font-bold tracking-widest">Email Address</p>
+                                <p class="text-xl font-semibold group-hover:text-blue-500 transition-colors">
+                                    idevina01@student.ciputra.ac.id</p>
+                            </div>
+                        </a>
+                        <div class="space-y-4">
+                            <div class="w-full h-72 rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+                                <iframe src="https://www.google.com/maps?q=-7.1568,112.6556&hl=en&z=14&output=embed"
+                                    class="w-full h-full" allowfullscreen="" loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
+                            <div class="bg-white/5 border border-white/10 rounded-2xl p-5">
+                                <p class="text-gray-400 text-sm uppercase tracking-widest mb-2">My Location</p>
+                                <h4 class="text-2xl font-bold mb-3">Gresik Kota Mas, East Java</h4>
+                                <a href="https://maps.app.goo.gl/suwSPsyiUTvcA2Fy8" target="_blank"
+                                    class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white text-black font-semibold hover:bg-blue-500 hover:text-white transition-all duration-300">
+                                    📍 Open in Google Maps
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="max-w-6xl mx-auto mt-24 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center reveal reveal-up">
+                <div class="text-center md:text-left mb-8 md:mb-0">
+                    <img src="logo.jpg" class="w-20 rounded-full">
+                    <p class="text-xs tracking-widest">copyright @ 2026</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-x-12 gap-y-4">
+                    <a href="#" data-page="home" class="footer-link text-sm uppercase tracking-tighter">Home</a>
+                    <a href="#" data-page="hobbies" class="footer-link text-sm uppercase tracking-tighter">MyHobbies</a>
+                    <a href="#" data-page="home" data-scroll="about"
+                        class="footer-link text-sm uppercase tracking-tighter">About Me</a>
+                    <a href="#" data-page="gallery" class="footer-link text-sm uppercase tracking-tighter">My
+                        Gallery</a>
+                    <a href="#" data-page="home" data-scroll="projects"
+                        class="footer-link text-sm uppercase tracking-tighter">My Project</a>
+                    <a href="#" data-page="home" data-scroll="contact-section"
+                        class="footer-link text-sm uppercase tracking-tighter">Contact Me</a>
+                </div>
+            </div>
+        </footer>
+
+    </div><!-- /page-hobbies -->
+
+
+    <!--  GALLERY PAGE  -->
+    <div id="page-gallery" class="page">
+
+        <header class="pt-40 pb-10 px-6 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4 tracking-tighter uppercase reveal reveal-up">My Gallery</h1>
+            <p class="text-gray-400 text-lg reveal reveal-up delay-200">Every picture tells a story, here are mine!</p>
+        </header>
+
+        <section class="text-center px-6 mb-16 reveal reveal-up delay-300">
+            <div class="tab-container" style="display:inline-flex; width:100%; max-width:500px;">
+                <div data-target="highschool" class="tab-btn active">high school</div>
+                <div data-target="college" class="tab-btn">college</div>
+                <div data-target="family" class="tab-btn">family</div>
+            </div>
+        </section>
+
+        <main class="max-w-7xl mx-auto px-6 md:px-20 pb-20">
+
+            <div id="highschool" class="gallery-section active">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="gallery-item aspect-square"><img src="sch2.jpg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="sch3.jpg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="sch4.jpg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="sch5.jpg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="sch6.jpg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="sch7.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="sch8.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="sch9.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="sch10.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="sch11.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="sch12.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="sch13.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="sch14.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="sch15.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="sch17.jpg" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+
+            <div id="college" class="gallery-section">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="gallery-item aspect-square"><img src="coll1.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="coll2.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="coll3.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="coll4.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="coll5.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="coll6.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="coll7.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="coll8.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="coll9.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="coll10.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="coll11.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="coll12.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="coll13.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="coll14.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="coll15.jpeg" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+
+            <div id="family" class="gallery-section">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="gallery-item aspect-square"><img src="fam1.jpg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="fam2.jpg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="fam3.jpg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="fam4.jpg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="fam5.jpg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="fam6.jpg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="fam7.jpg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="fam8.jpg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="fam9.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="fam12.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="fam11.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-square"><img src="fam10.jpeg" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- FOOTER GALLERY -->
+        <footer id="contact-section"
+            class="pt-24 pb-12 px-6 md:px-20 bg-black/40 border-t border-white/10 rounded-t-[60px]">
+            <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div class="bg-[#1e1e1e] p-10 rounded-[30px] border border-white/5 reveal reveal-left">
+                    <p class="text-gray-400 mb-2">Contact Me</p>
+                    <h3 class="text-4xl font-bold mb-10">Let's Get In Touch</h3>
+                    <form class="space-y-6">
+                        <input type="text" placeholder="your name..."
+                            class="w-full p-4 bg-[#d1d1d1] text-black rounded-lg focus:ring-4 ring-blue-500/30 outline-none transition-all">
+                        <input type="email" placeholder="example@gmail.com"
+                            class="w-full p-4 bg-[#d1d1d1] text-black rounded-lg focus:ring-4 ring-blue-500/30 outline-none transition-all">
+                        <textarea rows="4" placeholder="type here..."
+                            class="w-full p-4 bg-[#d1d1d1] text-black rounded-lg focus:ring-4 ring-blue-500/30 outline-none transition-all"></textarea>
+                        <button type="submit"
+                            class="px-12 py-4 bg-[#0a0a0a] border border-white/20 text-white font-bold rounded-full hover:bg-white hover:text-black transition-all transform hover:scale-105">Submit</button>
+                    </form>
+                </div>
+                <div class="flex flex-col justify-between reveal reveal-right">
+                    <div class="space-y-10">
+                        <a href="https://wa.me/6281228643644" target="_blank" class="flex items-center group">
+                            <div
+                                class="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mr-6 group-hover:bg-green-500 transition-colors">
+                                <span class="text-2xl">📱</span>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 uppercase font-bold tracking-widest">WhatsApp</p>
+                                <p class="text-xl font-semibold group-hover:text-green-500 transition-colors">
+                                    081228643644</p>
+                            </div>
+                        </a>
+                        <a href="mailto:idevina01@student.ciputra.ac.id" class="flex items-center group">
+                            <div
+                                class="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mr-6 group-hover:bg-blue-500 transition-colors">
+                                <span class="text-2xl">✉️</span>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 uppercase font-bold tracking-widest">Email Address</p>
+                                <p class="text-xl font-semibold group-hover:text-blue-500 transition-colors">
+                                    idevina01@student.ciputra.ac.id</p>
+                            </div>
+                        </a>
+                        <div class="space-y-4">
+                            <div class="w-full h-72 rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+                                <iframe src="https://www.google.com/maps?q=-7.1568,112.6556&hl=en&z=14&output=embed"
+                                    class="w-full h-full" allowfullscreen="" loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
+                            <div class="bg-white/5 border border-white/10 rounded-2xl p-5">
+                                <p class="text-gray-400 text-sm uppercase tracking-widest mb-2">My Location</p>
+                                <h4 class="text-2xl font-bold mb-3">Gresik Kota Mas, East Java</h4>
+                                <a href="https://maps.app.goo.gl/suwSPsyiUTvcA2Fy8" target="_blank"
+                                    class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white text-black font-semibold hover:bg-blue-500 hover:text-white transition-all duration-300">
+                                    📍 Open in Google Maps
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="max-w-6xl mx-auto mt-24 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center reveal reveal-up">
+                <div class="text-center md:text-left mb-8 md:mb-0">
+                    <img src="logo.jpg" class="w-20 rounded-full">
+                    <p class="text-xs tracking-widest">copyright @ 2026</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-x-12 gap-y-4">
+                    <a href="#" data-page="home" class="footer-link text-sm uppercase tracking-tighter">Home</a>
+                    <a href="#" data-page="hobbies" class="footer-link text-sm uppercase tracking-tighter">MyHobbies</a>
+                    <a href="#" data-page="home" data-scroll="about"
+                        class="footer-link text-sm uppercase tracking-tighter">About Me</a>
+                    <a href="#" data-page="gallery" class="footer-link text-sm uppercase tracking-tighter">My
+                        Gallery</a>
+                    <a href="#" data-page="home" data-scroll="projects"
+                        class="footer-link text-sm uppercase tracking-tighter">My Project</a>
+                    <a href="#" data-page="home" data-scroll="contact-section"
+                        class="footer-link text-sm uppercase tracking-tighter">Contact Me</a>
+                </div>
+            </div>
+        </footer>
+
+    </div><!-- /page-gallery -->
+
+
+    <!--  SCRIPTS  -->
+    <script>
+        $(document).ready(function () {
+
+            /* 
+               1. SCROLL PROGRESS BAR
+             */
+            window.addEventListener('scroll', function () {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+                document.getElementById('scroll-progress').style.width = progress + '%';
+            });
+
+            /* 
+               2. SCROLL REVEAL — Intersection Observer
+             */
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        // once revealed, stop watching
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.12,       // trigger when 12% visible
+                rootMargin: '0px 0px -40px 0px'  // slight offset from bottom
+            });
+
+            function initReveal() {
+                document.querySelectorAll('.reveal').forEach(el => {
+                    // Reset in case page was re-visited
+                    el.classList.remove('visible');
+                    revealObserver.observe(el);
+                });
+            }
+
+            /* 
+               3. GALLERY ITEM STAGGER REVEAL
+             */
+            const galleryObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        galleryObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+
+            function initGalleryReveal() {
+                document.querySelectorAll('.gallery-item').forEach((el, i) => {
+                    el.classList.remove('visible');
+                    el.style.transitionDelay = (i % 3) * 0.1 + 's'; // stagger by column
+                    galleryObserver.observe(el);
+                });
+            }
+
+            /* 
+               4. HERO PARALLAX
+             */
+            window.addEventListener('scroll', function () {
+                const heroImg = document.getElementById('hero-img');
+                if (heroImg) {
+                    heroImg.style.transform = 'translateY(' + (window.scrollY * 0.3) + 'px)';
+                }
+            });
+
+            /* 
+               5. PAGE SWITCHING
+             */
+            function switchPage(pageName, scrollTarget) {
+                $('.page').removeClass('active').hide();
+                var $target = $('#page-' + pageName);
+                $target.addClass('active').show();
+
+                $('.nav-link').removeClass('active');
+                $('[data-page="' + pageName + '"]:not([data-scroll])').first().addClass('active');
+
+                window.scrollTo(0, 0);
+
+                // Re-init reveal animations for the newly shown page
+                setTimeout(function () {
+                    initReveal();
+                    initGalleryReveal();
+                }, 50);
+
+                if (scrollTarget) {
+                    setTimeout(function () {
+                        var $el = $('#' + scrollTarget);
+                        if ($el.length) {
+                            $('html, body').animate({ scrollTop: $el.offset().top }, 600);
+                        }
+                    }, 200);
+                }
+
+                document.getElementById('mobile-menu').style.display = 'none';
+            }
+
+            /*  All data-page clicks  */
+            $(document).on('click', '[data-page]', function (e) {
+                e.preventDefault();
+                switchPage($(this).data('page'), $(this).data('scroll') || null);
+            });
+
+            /*  Mobile menu toggle  */
+            $('#mobile-menu-btn').on('click', function () {
+                var menu = document.getElementById('mobile-menu');
+                if (menu.style.display === 'flex') {
+                    menu.style.display = 'none';
+                } else {
+                    menu.style.display = 'flex';
+                    menu.style.flexDirection = 'column';
+                }
+            });
+
+            /*  Gallery tab switching  */
+            $(document).on('click', '.tab-btn', function () {
+                $('.tab-btn').removeClass('active');
+                $(this).addClass('active');
+                $('.gallery-section').removeClass('active');
+                $('#' + $(this).data('target')).addClass('active');
+                // Re-init gallery reveal for newly shown tab
+                setTimeout(initGalleryReveal, 60);
+            });
+
+            /*  Submit button glow  */
+            $(document).on('mouseenter', 'button[type="submit"]', function () {
+                $(this).addClass('shadow-[0_0_20px_rgba(255,255,255,0.3)]');
+            }).on('mouseleave', 'button[type="submit"]', function () {
+                $(this).removeClass('shadow-[0_0_20px_rgba(255,255,255,0.3)]');
+            });
+
+            /*  Contact button scroll  */
+            document.querySelectorAll('.contact-btn').forEach(button => {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const activePage = document.querySelector('.page.active');
+                    if (!activePage) return;
+                    const contactSection = activePage.querySelector('#contact-section');
+                    if (contactSection) {
+                        contactSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            /*  INIT on load  */
+            switchPage('home');
+        });
+    </script>
+
+</body>
+
+</html>
